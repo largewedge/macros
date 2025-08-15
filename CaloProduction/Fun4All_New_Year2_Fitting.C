@@ -6,6 +6,8 @@
 
 #include <calotrigger/TriggerRunInfoReco.h>
 
+#include <epd/sEPDTowerBuilder.h>
+
 #include <calovalid/CaloFittingQA.h>
 
 #include <ffamodules/CDBInterface.h>
@@ -26,6 +28,7 @@
 R__LOAD_LIBRARY(libfun4allraw.so)
 R__LOAD_LIBRARY(libcalovalid.so)
 R__LOAD_LIBRARY(libcalotrigger.so)
+R__LOAD_LIBRARY(libepd.so)
 
 // this pass containis the reco process that's stable wrt time stamps(raw tower building)
 void Fun4All_New_Year2_Fitting(int nEvents = 100,
@@ -54,6 +57,10 @@ void Fun4All_New_Year2_Fitting(int nEvents = 100,
   se->registerSubsystem(triggerinfo);
 
   Process_Calo_Fitting();
+
+  // SEPD Geometry Creation (calibration happens in later production stage)
+  sEPDTowerBuilder *sepdbuilder = new sEPDTowerBuilder();
+  se->registerSubsystem(sepdbuilder);
 
   ///////////////////////////////////
   // Validation
